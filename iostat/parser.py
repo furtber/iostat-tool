@@ -36,9 +36,11 @@ class Parser:
         return stat
 
     def parse_cpu_stat(self, line):
+        line = line.replace(',', '.')
         self.cpu_stat['stat'] = [float(i) for i in line.split()]
 
     def parse_device_stat(self, line):
+        line = line.replace(',', '.')
         s = line.split()
         stat = {s[0]: [float(i) for i in s[1:]]}
         self.device_stat['stats'].append(stat)
