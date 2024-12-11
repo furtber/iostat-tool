@@ -23,6 +23,9 @@ def parse_datetime(s, fmt='%Y%m%d%H%M%S'):
 
     >>> parse_datetime('09/26/21 13:35:19', fmt='%m/%d/%y %H:%M:%S')
     datetime.datetime(2021, 9, 26, 13, 35, 19)
+
+    >>> parse_datetime('31.03.2024 17:45:19', fmt='%d.%m.%Y %H:%M:%S')
+    datetime.datetime(2024, 3, 31, 17, 45, 19)
     """
     return datetime.strptime(s, fmt)
 
@@ -37,6 +40,10 @@ IOSTAT_DATE_JA = re.compile(r"""
 (?P<date>^\d{2}/\d{2}/\d{2}\s*\d{2}:\d{2}:\d{2})
 """, re.VERBOSE)
 
+IOSTAT_DATE_FORMAT_DE = '%d.%m.%Y %H:%M:%S'
+IOSTAT_DATE_DE = re.compile(r"""
+(?P<date>^\d{2}\.\d{2}\.\d{4}\s*\d{2}:\d{2}:\d{2})
+""", re.VERBOSE)
 
 def get_iostat_date_format(s):
     """
@@ -44,6 +51,8 @@ def get_iostat_date_format(s):
     '%m/%d/%Y %I:%M:%S %p'
     >>> get_iostat_date_format('09/26/21 13:35:19')
     '%m/%d/%y %H:%M:%S'
+    >>> get_iostat_date_format('31.03.2024 17:45:19')
+    '%d.%m.%Y %H:%M:%S'
     >>> get_iostat_date_format('09/26/2021 03:35:19') is None
     True
     """
@@ -53,6 +62,8 @@ def get_iostat_date_format(s):
     ja = re.search(IOSTAT_DATE_JA, s)
     if ja is not None:
         return IOSTAT_DATE_FORMAT_JA
+    if de is not None:
+        return IOSTAT_DATE_FORMAT_DE
     return None
 
 
